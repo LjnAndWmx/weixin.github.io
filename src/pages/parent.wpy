@@ -1,0 +1,56 @@
+<style lang="less">
+
+</style>
+<template>
+  <button @tap="showModel">弹出小黑窗</button>
+  <heiToast></heiToast>
+  <child :title="parentTitle" :syncTitle.sync="parentTitle" :twoWayTitle="parentTitle"></child>
+  <button @tap="dialogModel">弹出提示框</button>
+  <dialog></dialog>
+</template>
+
+<script>
+import wepy from 'wepy';
+import heiToast from '../component/heiToast'
+import child from '../component/child'
+import dialog from '../component/dialog'
+
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test'
+  };
+  data = {
+    parentTitle: 'p-title'
+  };
+  components = {
+    heiToast,
+    child,
+    dialog
+  };
+  methods = {
+    showModel() {
+      this.$invoke('heiToast', 'show', {
+        title: '我的小黑窗',
+        icon: 'http://www.itheima.com/images/logo.png',
+        duration: 2000
+      });
+    }
+    dialogModel(){
+      this.$invoke('dialog','show1',{
+        title:'温馨提示',
+        content:'该组件自己写的',
+        duration:3000
+      })
+     
+    }
+  };
+  onLoad() {
+    console.log('onLoad');
+    this.$emit('child', 1);
+    // 以下写法不可行
+    // this.$child.twoWayTitle='gaibian'
+    // this.$child.$apply()
+    // console.log('我在父组件修改了哟')
+  }
+}
+</script>

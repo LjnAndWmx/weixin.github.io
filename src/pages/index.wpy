@@ -1,0 +1,225 @@
+<style lang="less">
+.page {
+  background-color: #f8f8f8;
+  .page_hd {
+    height: 100rpx;
+    width: 100%;
+    background-color: lemonchiffon;
+    padding: 50rpx;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    .title {
+      font-size: 30rpx;
+      font-weight: 900;
+    }
+    .desc {
+      font-size: 24rpx;
+    }
+  }
+  .page_bd {
+    margin-top: 50rpx;
+    .list {
+      padding: 20rpx;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      .list_item {
+        background-color: lightblue;
+        width: 100%;
+        margin-bottom: 20rpx;
+        .myui-flex {
+          height: 120rpx;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 50rpx;
+          box-sizing: border-box;
+          .myui-flex_item {
+            font-size: 30rpx;
+          }
+          image {
+            width: 50rpx;
+            height: 50rpx;
+          }
+        }
+        .myuiList_pages {
+          padding: 0 20rpx;
+          box-sizing: border-box;
+          width: 100%;
+          .myui-cells{
+            margin-top: 0;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: .3s;
+            &:before,&:after{
+              display: block;
+            }
+              &_show{
+                 opacity: 1;
+                 transform: translateY(0)
+              }
+            .myui-cell{
+              &:before{
+                right: 15rpx;
+              }
+              height: 90rpx;
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              border-bottom: 1px solid #aaa;
+              .myui-cell_bg{
+                font-size: 24rpx;
+              }
+              .myui-cell_ft{
+                color: #aaa;
+              }
+            }
+            .myui-cell:last-child{
+              border-bottom: none;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</style>
+<template>
+  <view class="page">
+     <view class="page_hd">
+       <view class="title">MYUI</view>
+       <view class="desc">
+          Hello world 自定义组件
+       </view>
+     </view>
+   <view class="page_bd">
+     <view class="list">
+         <block wx:for="{{list}}" wx:key="id">
+            <view class="list_item">
+              <view id="{{item.id}}" class="myui-flex" @tap="listToggle">
+                <view class="myui-flex_item">{{item.name}}</view>
+                <image class="myui-flex_img" src="../images/icon_nav_{{item.id}}.png"></image>
+              </view>
+              <view class="myuiList_pages" hidden="{{!item.open}}">
+                   <view class="myui-cells {{item.open?'myui-cells_show':''}}">
+                      <block wx:for="{{item.pages}}" wx:for-item="page" wx:key="this">
+                       <navigator class="myui-cell" url="">
+                          <view class="myui-cell_bg">{{page}}</view>
+                          <view class="myui-cell_ft">></view>
+                       </navigator>
+                    </block>
+                  </view>
+              </view>
+            </view>
+         </block>
+     </view>
+   </view>
+    <!-- <button @tap="showModel">弹出小黑窗</button> -->
+  </view>
+  <!-- <heiToast></heiToast> -->
+  <!-- <child :title="parentTitle" :syncTitle.sync="parentTitle" :twoWayTitle="parentTitle"></child> -->
+</template>
+
+<script>
+import wepy from 'wepy';
+// import heiToast from '../component/heiToast'
+// import child from '../component/child'
+
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test'
+  };
+  data = {
+    // parentTitle: 'p-title',
+    list: [
+      {
+        id: 'form',
+        name: '表单',
+        open: false,
+        pages: ['button', 'list', 'input', 'slider', 'uploader']
+      },
+      {
+        id: 'widget',
+        name: '基础组件',
+        open: false,
+        pages: [
+          'article',
+          'badge',
+          'flex',
+          'footer',
+          'gallery',
+          'grid',
+          'icons',
+          'loadmore',
+          'panel',
+          'preview',
+          'progress'
+        ]
+      },
+      {
+        id: 'feedback',
+        name: '操作反馈',
+        open: false,
+        pages: ['actionsheet', 'dialog', 'msg', 'picker', 'heiToast']
+      },
+      {
+        id: 'nav',
+        name: '导航相关',
+        open: false,
+        pages: ['navbar', 'tabbar']
+      },
+      {
+        id: 'search',
+        name: '搜索相关',
+        open: false,
+        pages: ['searchBar']
+      }
+    ]
+  };
+  components = {
+    // heiToast,
+    // child
+  };
+  methods = {
+    listToggle(e){
+      console.log(e)
+      // 获取id
+      let id = e.currentTarget.id
+      let list = this.data.list
+      let len = list.length
+      for(let i = 0;i<len;i++){
+        if(list[i].id==id){
+            list[i].open = !list[i].open
+        }else{
+          list[i].open =false
+        }
+      }
+      this.setData({
+        list:list
+      })
+    }
+    // showModel() {
+    //   this.$invoke('heiToast', 'show', {
+    //     title: '我的小黑窗',
+    //     icon: 'http://www.itheima.com/images/logo.png',
+    //     duration: 2000
+    //   });
+    // }
+  };
+  onLoad() {
+    // console.log('onLoad');
+    // this.$emit('child', 1);
+    // // 一下写法不可行
+    // this.$child.twoWayTitle='gaibian'
+    // this.$child.$apply()
+    // console.log('我在父组件修改了哟')
+  }
+}
+</script>

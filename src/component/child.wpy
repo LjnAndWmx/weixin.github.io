@@ -1,0 +1,75 @@
+<!--  -->
+<template>
+  <view class='container'>
+      <text>我是child组件</text>
+      <text> {{num}}</text>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class Child extends wepy.component {
+  props = {
+      title:String,
+      syncTitle:{
+          type:String,
+          default:'null'
+      },
+      twoWayTitle:{
+          twoWay:true,
+          type:String,
+          default:'nothing'
+      }
+  }
+
+  data = {
+      num:0
+  }
+
+  components = {}
+
+  methods = {
+     
+  }
+
+  events = {
+    //   'child':(p1,$event)=>{
+    //       console.log('我是子组件触发')
+    //   }
+  }
+
+  watch = {}
+
+  computed = {}
+
+  onLoad() {
+    //    setInterval(()=>{
+    //       this.num++
+    //       this.$apply()
+    //   },1000)
+    console.log('用于验证父组件修改，子组件是否同步')
+    console.log(this.title)//p-title
+    console.log(this.syncTitle)//p-title
+    console.log(this.twoWayTitle)//p-title
+
+    // 子向父组件传值
+    console.log('用于验证子组件修改，父组件是否同步')
+    this.title='c-title'
+    console.log(this.$parent.parentTitle)//p-title
+    this.twoWayTitle='two-Way-Title'//子组件修改，父组件是否同步
+    this.$apply()
+    console.log(this.$parent.parentTitle)//two-Way-Title
+    // 父组件修改数据，子组件是否同步
+    this.$parent.parentTitle = 'p-title-changed'
+    this.$parent.$apply()
+    console.log(this.title)//c-title
+    console.log(this.syncTitle)//p-title-changed 同步父组件修改
+
+  }
+
+  onShow() {}
+}
+</script>
+
+<style lang='less'>
+</style>

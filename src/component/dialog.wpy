@@ -1,0 +1,102 @@
+<!--  -->
+<template>
+  <view class="mask"></view>
+  <view class='dialog'>
+      <view class="title" hidden="{{isShow}}">{{title}}</view>
+      <view class="content">
+          <text>{{content}}</text>
+          <view class="btn">
+              <button>确定</button>
+              <button>取消</button>
+          </view>
+      </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy';
+  export default class Dialog extends wepy.component {
+    props = {};
+
+    data = {
+        title:'标题',
+        content:'内容',
+        isShow:true
+    };
+
+    components = {};
+
+    methods = {
+        show1(opt){
+           this.title = opt.title||'标题'
+           this.content = opt.content||'内容'
+           setTimeout(() => {
+                this.isShow = true
+                this.$apply()
+            }, 1000||opt.duration)
+        }
+    };
+
+    events = {
+        show1:()=>{
+          console.log('dialog弹框成功！')
+        }
+    };
+
+    watch = {};
+
+    computed = {};
+
+    onLoad() { };
+
+    onShow() { };
+  }
+</script>
+
+<style lang='less'>
+.mask{
+    background-color: #eee;
+}
+.dialog{
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color: lightpink;
+    z-index: 998;
+    width: 380rpx;
+    height: 250rpx;
+    border-radius: 10rpx;
+    .title{
+       width: 100%;
+       text-align: center;
+       height: 50rpx;
+       line-height: 50rpx;
+       font-size: 30rpx;
+       border-bottom: 1px solid red;
+    }
+    .content{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 198rpx;
+        text{
+            font-size: 30rpx;
+        }
+        .btn{
+            display: flex;
+            button{
+                text-align: center;
+                line-height: 80rpx;
+                width: 150rpx;
+                height: 80rpx;
+                border-radius: 30rpx;
+                &:last-child{
+                    margin-left: 30rpx;
+                }
+            }
+        }
+    }
+}
+</style>
